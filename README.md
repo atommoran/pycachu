@@ -2,6 +2,12 @@
 
 An interactive cache that saves user-submitted credentials and tokens in a yaml file, and passwords in the OS keychain using the keyring module
 
+## Install
+
+```
+pip install pycachuser
+```
+
 ## Getting Started
 
 Once you have imported the module:

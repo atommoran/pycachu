@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pycachu",
+    name="pycachuser",
     version="0.0.1",
     author="Tom Moran",
     author_email="tommorancodes@gmail.com",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/atommoran/pycachu",
     project_urls={
-        "Bug Tracker": "https://github.com/atommoran/Python-Interactive-Cache/issues",
+        "Bug Tracker": "https://github.com/atommoran/pycachu/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
