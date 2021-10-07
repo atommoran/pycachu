@@ -8,11 +8,13 @@ from getpass import getpass
 from src.pycachu.errors import *
 import src.pycachu.validators as validators
 
+
 def _generate_keyring_key(file_location, key):
     file_key_part = file_location.replace("/", "_")
     file_key_part = file_location.replace("\\", "_")
     keyring_key = f"{file_key_part}.{key}"
     return keyring_key
+
 
 def get_input(prompt, hide=False):
     if hide == True:
@@ -27,15 +29,26 @@ class Token:
     def _get_token_from_user(self):
         if self.user_prompt is None:
             inputted = get_input(
-                f"Please input the token for {self.key} in the {self.cache.file_name} cache: ", hide=self.hide_input
+                f"Please input the token for {self.key} in the {self.cache.file_name} cache: ",
+                hide=self.hide_input,
             )
         else:
             inputted = get_input(self.user_prompt, hide=self.hide_input)
         while not self.validator.validate(inputted):
-            inputted = get_input(f"The token was invalid ({self.validator.message}). Try again: ", hide=self.hide_input)
+            inputted = get_input(
+                f"The token was invalid ({self.validator.message}). Try again: ",
+                hide=self.hide_input,
+            )
         return inputted
 
-    def __init__(self, cache, key, user_prompt=None, hide_input=False, validator=validators.NotEmpty()):
+    def __init__(
+        self,
+        cache,
+        key,
+        user_prompt=None,
+        hide_input=False,
+        validator=validators.NotEmpty(),
+    ):
         self.cache = cache
         self.key = key
         self.user_prompt = user_prompt
@@ -63,30 +76,49 @@ class Token:
     def error(self, **kwargs):
         raise CacheTokenError(self, **kwargs)
 
+
 class Credential:
     def _get_username_from_user(self):
         if self.username_prompt is None:
             username = get_input(
-                f"Please input the username for {self.key} in the {self.cache.file_name} cache: ", hide=self.hide_username
+                f"Please input the username for {self.key} in the {self.cache.file_name} cache: ",
+                hide=self.hide_username,
             )
         else:
             username = get_input(self.username_prompt, hide=self.hide_username)
         while not self.username_validator.validate(username):
-            username = get_input(f"The username was invalid ({self.username_validator.message}). Try again: ", hide=self.hide_username)
+            username = get_input(
+                f"The username was invalid ({self.username_validator.message}). Try again: ",
+                hide=self.hide_username,
+            )
         return username
 
     def _get_password_from_user(self):
         if self.password_prompt is None:
             password = get_input(
-                f"Please input the password for {self.key} in the {self.cache.file_name} cache: ", hide=self.hide_password
+                f"Please input the password for {self.key} in the {self.cache.file_name} cache: ",
+                hide=self.hide_password,
             )
         else:
             password = get_input(self.password_prompt, hide=self.hide_password)
         while not self.password_validator.validate(password):
-            password = get_input(f"The password was invalid ({self.password_validator.message}). Try again: ", hide=self.hide_password)
+            password = get_input(
+                f"The password was invalid ({self.password_validator.message}). Try again: ",
+                hide=self.hide_password,
+            )
         return password
 
-    def __init__(self, cache, key, username_prompt=None, password_prompt=None, hide_username=False, hide_password=True, username_validator=validators.NotEmpty(), password_validator=validators.NotEmpty()):
+    def __init__(
+        self,
+        cache,
+        key,
+        username_prompt=None,
+        password_prompt=None,
+        hide_username=False,
+        hide_password=True,
+        username_validator=validators.NotEmpty(),
+        password_validator=validators.NotEmpty(),
+    ):
         self.cache = cache
         self.key = key
         self.username_prompt = username_prompt
@@ -144,15 +176,22 @@ class Cache:
         self.file_path = path
         self.file_location = f"{path}{file_name}"
 
-        if reset == True and os.path.isfile(self.file_location): # file exists, but we're resetting it
+        if reset == True and os.path.isfile(
+            self.file_location
+        ):  # file exists, but we're resetting it
             self._load()
             self.clear()
             self._create()
-        elif os.path.isfile(self.file_location) and os.path.getsize(self.file_location) == 0: # file exists, but is empty
+        elif (
+            os.path.isfile(self.file_location)
+            and os.path.getsize(self.file_location) == 0
+        ):  # file exists, but is empty
             self._create()
-        elif os.path.isfile(self.file_location): # file exists and is good to be loaded up
+        elif os.path.isfile(
+            self.file_location
+        ):  # file exists and is good to be loaded up
             self._load()
-        else: # file does not exist
+        else:  # file does not exist
             self._create()
 
     def _write(self):
@@ -169,13 +208,17 @@ class Cache:
         if key not in self.full_dict:
             raise KeyError(f"Did not find {key} in the YAML from {self.file_name}")
         if not isinstance(self.full_dict[key], dict):
-            raise TypeError(f"{key} in the YAML from {self.file_name} is not in the expected key-value format")
+            raise TypeError(
+                f"{key} in the YAML from {self.file_name} is not in the expected key-value format"
+            )
 
     def _validate_dict(self):
         if not hasattr(self, "full_dict"):
             raise CacheLoadError(f"No YAML was loaded from {self.file_name}")
         if not isinstance(self.full_dict, dict):
-            raise CacheLoadError(f"The YAML from {self.file_name} was not in the expected key-value format")   
+            raise CacheLoadError(
+                f"The YAML from {self.file_name} was not in the expected key-value format"
+            )
         self._validate_base_key("tokens")
         self._validate_base_key("credentials")
 
@@ -184,7 +227,9 @@ class Cache:
             try:
                 self.full_dict = yaml.safe_load(cache_file)
             except:
-                raise CacheLoadError(f"Valid YAML could not be safe-loaded from {self.file_name}")
+                raise CacheLoadError(
+                    f"Valid YAML could not be safe-loaded from {self.file_name}"
+                )
         self._validate_dict()
         self.tokens = self.full_dict["tokens"]
         self.credentials = self.full_dict["credentials"]
@@ -198,8 +243,17 @@ class Cache:
 
     def clear_credentials(self):
         for key in self.credentials:
-            if keyring.get_password(_generate_keyring_key(self.file_location, key), self.credentials[key]) != None:
-                keyring.delete_password(_generate_keyring_key(self.file_location, key), self.credentials[key])
+            if (
+                keyring.get_password(
+                    _generate_keyring_key(self.file_location, key),
+                    self.credentials[key],
+                )
+                != None
+            ):
+                keyring.delete_password(
+                    _generate_keyring_key(self.file_location, key),
+                    self.credentials[key],
+                )
         self.credentials.clear()
         self._write()
 

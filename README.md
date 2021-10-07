@@ -72,7 +72,14 @@ print(credential.username, credential.password)
 You can specify your own terminal output for the name and password, and hide the username input (the password input is hidden by default):
 
 ```
-credential = pycachu.Credential(cache, "key", username_prompt="Submit the username: ", password_prompt="And now the password: ", hide_username=True, hide_password=False)
+credential = pycachu.Credential(
+    cache,
+    "key",
+    username_prompt="Submit the username: ",
+    password_prompt="And now the password: ",
+    hide_username=True,
+    hide_password=False,
+)
 ```
 
 All kwargs to the Credential initiator are carried in Cache.get_credential(). This is just a demonstration of the other (more convoluted) method for creating a Credential.
