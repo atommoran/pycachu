@@ -11,7 +11,7 @@ setuptools.setup(
     description="Grabs and stores credentials in a human-readable yaml file, with passwords saved using the keyring module",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/atommoran/Python-Interactive-Cache",
+    url="https://github.com/atommoran/pycachu",
     project_urls={
         "Bug Tracker": "https://github.com/atommoran/Python-Interactive-Cache/issues",
     },

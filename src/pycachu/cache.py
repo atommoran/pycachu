@@ -5,8 +5,8 @@ import keyring
 import yaml
 from getpass import getpass
 
-from errors import *
-import validators
+from src.pycachu.errors import *
+import src.pycachu.validators as validators
 
 def _generate_keyring_key(file_location, key):
     file_key_part = file_location.replace("/", "_")
