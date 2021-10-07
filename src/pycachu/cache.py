@@ -5,7 +5,7 @@ import keyring
 import yaml
 from getpass import getpass
 
-import errors
+from errors import *
 
 def _generate_keyring_key(file_location, key):
     file_key_part = file_location.replace("/", "_")
