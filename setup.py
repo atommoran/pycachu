@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pycachuser",
-    version="0.0.1",
+    version="0.0.2",
     author="Tom Moran",
     author_email="tommorancodes@gmail.com",
     description="Grabs and stores credentials in a human-readable yaml file, with passwords saved using the keyring module",
